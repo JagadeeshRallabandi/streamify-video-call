@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: "https://jagasstreamifyvideocallapp.vercel.app",
+    origin: "https://jagasstreamify.vercel.app",
     credentials: true, // allow frontend to send cookies
   })
 );
