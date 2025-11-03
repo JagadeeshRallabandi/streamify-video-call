@@ -3,6 +3,7 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
@@ -11,14 +12,15 @@ import chatRoutes from "./routes/chat.route.js";
 import { connectDB } from "./lib/db.js";
 
 const app = express();
-const PORT = process.env.PORT;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const __dirname = path.resolve();
+const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
     origin: "https://jagasstreamify.vercel.app",
-    credentials: true, // allow frontend to send cookies
+    credentials: true,
   })
 );
 
@@ -33,11 +35,12 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
   });
 }
 
+connectDB();
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectDB();
+  console.log(`✅ Server is running on port ${PORT}`);
 });
